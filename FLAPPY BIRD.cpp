@@ -4,7 +4,6 @@
 #include<stdlib.h>
 #include<string.h>
 #include<windows.h>
-#include<time.h>
 #include<fstream>
 #include<ctime>
 #include<string>
@@ -172,6 +171,8 @@ void gameover(){
 	cout<<"\t\t-------- Game Over -------"<<endl;
 	SetConsoleTextAttribute(console, 8);
 	cout<<"\t\t--------------------------"<<endl<<endl;
+	SetConsoleTextAttribute(console, 10);
+	cout<<"\t\tSkor : "<<score<<endl;
 	SetConsoleTextAttribute(console, 7);
 	cout<<"\t\tPencet apapun untuk kembali ke menu.";
 	getch();
