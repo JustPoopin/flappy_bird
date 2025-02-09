@@ -108,9 +108,11 @@ void genPipe(int ind){
 void drawPipe(int ind){
 	if( pipeFlag[ind] == true ){
 		for(int i=0; i<gapPos[ind]; i++){ 
+			SetConsoleTextAttribute(console, 10);
 			gotoxy(WIN_WIDTH-pipePos[ind],i+1); cout<<"***"; 
 		}
 		for(int i=gapPos[ind]+GAP_SIZE; i<SCREEN_HEIGHT-1; i++){ 
+			SetConsoleTextAttribute(console, 10);
 			gotoxy(WIN_WIDTH-pipePos[ind],i+1); cout<<"***"; 
 		}
 	} 
@@ -130,6 +132,7 @@ void erasePipe(int ind){
 void drawBird(){
 	for(int i=0; i<2; i++){
 		for(int j=0; j<6; j++){
+			SetConsoleTextAttribute(console, 14);
 			gotoxy(j+2,i+birdPos); cout<<bird[i][j];
 		}
 	}
@@ -163,21 +166,29 @@ void gameover(){
 	set_leaderboard(score);
 	clear();;
 	cout<<endl;
+	SetConsoleTextAttribute(console, 8);
 	cout<<"\t\t--------------------------"<<endl;
+	SetConsoleTextAttribute(console, 12);
 	cout<<"\t\t-------- Game Over -------"<<endl;
+	SetConsoleTextAttribute(console, 8);
 	cout<<"\t\t--------------------------"<<endl<<endl;
+	SetConsoleTextAttribute(console, 7);
 	cout<<"\t\tPencet apapun untuk kembali ke menu.";
 	getch();
 }
 
 void updateScore(){
+	SetConsoleTextAttribute(console, 10);
 	gotoxy(WIN_WIDTH + 7, 5); cout<<"Score : "<<score<<endl;
+	SetConsoleTextAttribute(console, 7);
 }
 
 void instructions(){
 	
 	clear();
+	SetConsoleTextAttribute(console, 10);
 	cout<<"Instruksi";
+	SetConsoleTextAttribute(console, 7);
 	cout<<"\n-----------------";
 	cout<<"\nPencet spasi untuk membuat burung melompat";
 	cout<<"\nHindari pipa untuk mendapatkan skor";
@@ -191,7 +202,9 @@ void leaderboard(){
 
     if ( file.is_open() ) {
 		clear();
+		SetConsoleTextAttribute(console, 10);
 		cout<<"Papan Skor";
+		SetConsoleTextAttribute(console, 7);
 		cout<<"\n-----------------";
 
 		string line;
@@ -223,7 +236,7 @@ void play(){
 	pipeFlag[1] = 0;
 	pipePos[0] = pipePos[1] = 4;
 	
-	clear();;
+	clear();
 	drawBorder();
 	genPipe(0);
 	updateScore();
@@ -302,6 +315,7 @@ int main(){
 	do{
 		
 		clear();;
+		SetConsoleTextAttribute(console, 14);
 		gotoxy(10,0); cout<<R"(
   ______ _                           ____  _         _ 
  |  ____| |                         |  _ \(_)       | |
@@ -312,6 +326,7 @@ int main(){
                 | |   | |     __/ |                    
                 |_|   |_|    |___/                     
 )";
+		SetConsoleTextAttribute(console, 7);
 		gotoxy(10,11); cout<<"1. Mulai Game ";
 		gotoxy(10,12); cout<<"2. Instruksi";
 		gotoxy(10,13); cout<<"3. Papan Skor";
