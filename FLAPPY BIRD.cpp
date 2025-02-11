@@ -1,8 +1,5 @@
 #include<iostream>
 #include<conio.h>
-#include<dos.h>
-#include<stdlib.h>
-#include<string.h>
 #include<windows.h>
 #include<fstream>
 #include<ctime>
@@ -153,7 +150,6 @@ int collision(){
 	}
 	return 0;
 }
-
 
 void debug(){
 	
@@ -310,6 +306,7 @@ void play(){
 
 int main(){
 	
+	SetConsoleTitle(TEXT("Flappy Bird"));
 	setcursor(0,0);
 	srand( (unsigned)time(NULL));
 	
