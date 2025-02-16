@@ -8,9 +8,7 @@
 #define SCREEN_WIDTH 90
 #define SCREEN_HEIGHT 26
 #define WIN_WIDTH 70
-#define MENU_WIDTH 20
 #define GAP_SIZE 7
-#define PIPE_DIF 45
 
 using namespace std;
  
@@ -52,9 +50,6 @@ void gotoxy(int x, int y)
 
 void setcursor(bool visible, DWORD size) 
 {
-	if(size == 0)
-		size = 20;	
-	
 	CONSOLE_CURSOR_INFO lpCursor;	
 	lpCursor.bVisible = visible;
 	lpCursor.dwSize = size;
@@ -74,7 +69,6 @@ void set_leaderboard(int num){
 		tm* now = std::localtime(&t);
 
 		ofstream output("data.txt");
-		//output.open("test.txt", std::ofstream::out | std::ofstream::trunc);
 		output << num << endl << now->tm_mday << '-' 
          << (now->tm_mon + 1) << '-'
          << (now->tm_year + 1900)
@@ -103,11 +97,11 @@ void genPipe(int ind){
 }
 void drawPipe(int ind){
 	if( pipeFlag[ind] == true ){
-		for(int i=0; i<gapPos[ind]; i++){ 
+		for(int i=0; i<gapPos[ind]; i++){ //atas
 			SetConsoleTextAttribute(console, 10);
 			gotoxy(WIN_WIDTH-pipePos[ind],i+1); cout<<"***"; 
 		}
-		for(int i=gapPos[ind]+GAP_SIZE; i<SCREEN_HEIGHT-1; i++){ 
+		for(int i=gapPos[ind]+GAP_SIZE; i<SCREEN_HEIGHT-1; i++){ //bawah
 			SetConsoleTextAttribute(console, 10);
 			gotoxy(WIN_WIDTH-pipePos[ind],i+1); cout<<"***"; 
 		}
@@ -143,16 +137,12 @@ void eraseBird(){
 }
 
 int collision(){
-	if( pipePos[0] >= 61  ){
+	if( pipePos[0] >= 61  ){ // area burung
 		if( birdPos<gapPos[0] || birdPos >gapPos[0]+GAP_SIZE ){
 			return 1;
 		}
 	}
 	return 0;
-}
-
-void debug(){
-	
 }
 
 
@@ -176,7 +166,7 @@ void gameover(){
 
 void updateScore(){
 	SetConsoleTextAttribute(console, 10);
-	gotoxy(WIN_WIDTH + 7, 5); cout<<"Score : "<<score<<endl;
+	gotoxy(WIN_WIDTH + 7, 5); cout<<"Skor: "<<score<<endl;
 	SetConsoleTextAttribute(console, 7);
 }
 
@@ -227,9 +217,9 @@ void leaderboard(){
 
 void play(){
 	
-	birdPos = 6;
+	birdPos = 6; //y
 	score = 0;
-	pipeFlag[0] =1;
+	pipeFlag[0] = 1;
 	pipeFlag[1] = 0;
 	pipePos[0] = pipePos[1] = 4;
 	
@@ -238,16 +228,18 @@ void play(){
 	genPipe(0);
 	updateScore();
 	
+	SetConsoleTextAttribute(console, 14);
 	gotoxy(WIN_WIDTH + 5, 2); cout<<"FLAPPY BIRD";
+	SetConsoleTextAttribute(console, 7);
 	gotoxy(WIN_WIDTH + 6, 4); cout<<"-----------";
 	gotoxy(WIN_WIDTH + 6, 6); cout<<"-----------";
 	gotoxy(WIN_WIDTH + 7, 12); cout<<"Kontrol";
 	gotoxy(WIN_WIDTH + 7, 13); cout<<"--------";
 	gotoxy(WIN_WIDTH + 4, 14); cout<<"Spasi = Lompat";
 	
-	gotoxy(10, 5); cout<<"Pencet apapun untuk mulai";
+	gotoxy(10, 5); cout<<"Pencet apapun untuk memulai";
 	getch();
-	gotoxy(10,5); cout<<"                          ";
+	gotoxy(10,5); cout<<"                           ";
 	
 	// set playing to true
 	playing = true;
@@ -255,13 +247,10 @@ void play(){
 	while(playing){
 		
 		if(kbhit()){
-			char ch =getch();
+			char ch = getch();
 			if( ch==32){
 				if( birdPos > 3)
-				birdPos-=3;
-			}
-			if(ch==27){
-				break;
+					birdPos-=3;
 			}
 		}	
 	
@@ -269,7 +258,6 @@ void play(){
 		drawBird();
 		drawPipe(0);
 		drawPipe(1);
-		debug();
 		if( collision()==1 ){
 			gameover();
 		}
@@ -287,18 +275,22 @@ void play(){
 		if(  pipeFlag[0] == 1 )
 			pipePos[0] +=2;
 		if(  pipeFlag[1] == 1 )
-			pipePos[0] +=2;
+			pipePos[1] +=2;
 		if ( pipePos[0] >= 40 && pipePos[0] <42){
 			pipeFlag[1] = 1;
-			pipeFlag[1] = 4;
 			genPipe(1);
 		}
 		if(pipePos[0]> 68){
 			score++;
 			updateScore();
-			pipeFlag[1] = 0;
+			// set current pipe to pipe 0
+			pipeFlag[0] = 1;
 			pipePos[0] = pipePos[1];
 			gapPos[0] = gapPos[1];
+			// clear last pipe for new pipe
+			pipeFlag[1] = 0;
+			pipePos[1] = 4;
+			gapPos[1] = 0;
 		}
 		
 		}
@@ -307,7 +299,7 @@ void play(){
 int main(){
 	
 	SetConsoleTitle(TEXT("Flappy Bird"));
-	setcursor(0,0);
+	setcursor(0,20);
 	srand( (unsigned)time(NULL));
 	
 	do{
@@ -341,6 +333,5 @@ int main(){
 	return 0;
 	
 }
-
 
 
